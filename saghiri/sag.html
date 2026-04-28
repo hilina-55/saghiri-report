@@ -1,0 +1,652 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Survey Report — SAGHIRI</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+  :root {
+    --mint:    #4ECDC4;
+    --teal:    #2BAE9C;
+    --deep:    #1A535C;
+    --blush:   #FF6B9D;
+    --peach:   #FFB347;
+    --lavender:#A8DADC;
+    --cream:   #F7F9F9;
+    --card:    #FFFFFF;
+    --text:    #1A2B2C;
+    --sub:     #5A7A7C;
+    --shadow:  0 4px 24px rgba(26,83,92,0.10);
+    --radius:  18px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--deep) 0%, var(--teal) 60%, var(--mint) 100%);
+    padding: 60px 40px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.08) 0%, transparent 60%),
+                radial-gradient(circle at 80% 20%, rgba(78,205,196,0.15) 0%, transparent 50%);
+  }
+  .hero-logo {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 24px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  }
+  
+.logo-container {
+    flex-shrink: 0;
+    width: 150px;
+    height: 150px;
+}
+.hero-logo {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 24px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  overflow: hidden; 
+}
+.logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+  .hero-logo svg {
+    width: 90px;
+    height: 90px;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 20px;
+    border-radius: 50px;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .hero h1 span { color: var(--mint); }
+  .hero p {
+    font-size: 16px;
+    color: rgba(255,255,255,0.80);
+    max-width: 560px;
+    margin: 0 auto 36px;
+    line-height: 1.8;
+    position: relative;
+  }
+
+  /* ── KPI STRIP ── */
+  .kpi-strip {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    position: relative;
+    margin-top: -40px;
+    padding: 0 40px 20px;
+  }
+  .kpi {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    min-width: 160px;
+    flex: 1;
+    max-width: 220px;
+    border-top: 4px solid var(--mint);
+    transition: transform .25s;
+  }
+  .kpi:hover { transform: translateY(-4px); }
+  .kpi .num {
+    font-size: 42px;
+    font-weight: 900;
+    color: var(--deep);
+    line-height: 1;
+  }
+  .kpi .num span { font-size: 22px; color: var(--teal); }
+  .kpi .label { font-size: 13px; color: var(--sub); margin-top: 6px; font-weight: 600; }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .section-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--deep);
+    margin: 52px 0 24px;
+    padding-right: 16px;
+    border-right: 5px solid var(--mint);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-title .icon { font-size: 26px; border: none; padding: 0; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+  @media(max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    transition: transform .25s;
+  }
+  .card:hover { transform: translateY(-3px); }
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--deep);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--cream);
+    line-height: 1.5;
+  }
+  .card.span-2 { grid-column: span 2; }
+  @media(max-width: 900px) { .card.span-2 { grid-column: span 1; } }
+
+  /* ── CHART WRAPPER ── */
+  .chart-wrap { position: relative; height: 260px; }
+  .chart-wrap.tall { height: 320px; }
+  .chart-wrap.short { height: 200px; }
+
+  /* ── HORIZONTAL BAR (custom) ── */
+  .hbar { display: flex; flex-direction: column; gap: 14px; }
+  .hbar-item { }
+  .hbar-label { font-size: 13px; color: var(--sub); margin-bottom: 5px; font-weight: 600; display: flex; justify-content: space-between; }
+  .hbar-track { background: var(--cream); border-radius: 50px; height: 12px; overflow: hidden; }
+  .hbar-fill {
+    height: 100%; border-radius: 50px;
+    background: linear-gradient(90deg, var(--teal), var(--mint));
+    transition: width 1.2s cubic-bezier(.4,0,.2,1);
+  }
+  .hbar-fill.pink { background: linear-gradient(90deg, var(--blush), #FFB3CC); }
+  .hbar-fill.orange { background: linear-gradient(90deg, #FF8C42, var(--peach)); }
+  .hbar-fill.purple { background: linear-gradient(90deg, #9B59B6, #C39BD3); }
+
+  /* ── PILL BADGES ── */
+  .pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+  .pill {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--cream); border-radius: 50px;
+    padding: 8px 16px; font-size: 13px; font-weight: 600; color: var(--deep);
+  }
+  .pill .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── INSIGHT BOX ── */
+  .insight {
+    background: linear-gradient(135deg, rgba(78,205,196,0.12), rgba(43,174,156,0.06));
+    border: 1px solid rgba(78,205,196,0.3);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-top: 32px;
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .insight-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+  .insight-text h4 { font-size: 15px; font-weight: 800; color: var(--deep); margin-bottom: 6px; }
+  .insight-text p { font-size: 13px; color: var(--sub); line-height: 1.8; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center; padding: 40px;
+    color: var(--sub); font-size: 13px;
+    border-top: 1px solid #e8eeee;
+  }
+  footer strong { color: var(--teal); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-logo">
+   <img src="./birdy.jpg" alt="SAGHIRI Logo" class="logo-img">
+  </div>
+  <div class="hero-badge">📊 Survey Results</div>
+  <h1>SAGHIRI Project<br><span>Parent Survey Report</span></h1>
+  <p>A survey for parents to understand their needs in monitoring their baby's health and their interest in a smart app solution</p>
+</div>
+
+<!-- KPI STRIP -->
+<div class="kpi-strip">
+  <div class="kpi">
+    <div class="num">666</div>
+    <div class="label">Total Participants</div>
+  </div>
+  <div class="kpi" style="border-color: var(--blush)">
+    <div class="num">87<span>%</span></div>
+    <div class="label">Support the App Idea</div>
+  </div>
+  <div class="kpi" style="border-color: var(--peach)">
+    <div class="num">82<span>%</span></div>
+    <div class="label">Current Parents</div>
+  </div>
+  <div class="kpi" style="border-color: var(--lavender)">
+    <div class="num">75<span>%</span></div>
+    <div class="label">Feel Challenges in Care</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECTION 1: WHO ARE THEY -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="section-title"><span class="icon">👶</span> Participant Profile</div>
+
+  <div class="grid-3">
+
+    <!-- Parenthood status -->
+    <div class="card">
+      <div class="card-title">Are you a parent?</div>
+      <div class="chart-wrap">
+        <canvas id="chartParent"></canvas>
+      </div>
+    </div>
+
+    <!-- Child age -->
+    <div class="card">
+      <div class="card-title">Child's Age</div>
+      <div class="chart-wrap">
+        <canvas id="chartAge"></canvas>
+      </div>
+    </div>
+
+    <!-- How they monitor health -->
+    <div class="card">
+      <div class="card-title">How do you usually monitor your baby's health?</div>
+      <div class="chart-wrap">
+        <canvas id="chartMonitor"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECTION 2: PAIN POINTS -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="section-title"><span class="icon">⚠️</span> Challenges and Difficulties</div>
+
+  <div class="grid-2">
+
+    <!-- Difficulty with child -->
+    <div class="card">
+      <div class="card-title">Have you faced difficulties caring for your baby?</div>
+      <div class="chart-wrap short">
+        <canvas id="chartDifficulty"></canvas>
+      </div>
+    </div>
+
+    <!-- Sufficient info -->
+    <div class="card">
+      <div class="card-title">Do you have enough information for your newborn care?</div>
+      <div class="chart-wrap short">
+        <canvas id="chartInfo"></canvas>
+      </div>
+    </div>
+
+    <!-- Types of difficulties (checkboxes) -->
+    <div class="card span-2">
+      <div class="card-title">Types of difficulties you have faced (Multiple choice — from 543 parent responses)</div>
+      <div class="hbar">
+        <div class="hbar-item">
+          <div class="hbar-label"><span>Sudden fever without noticing</span><span style="color:var(--teal);font-size:15px;font-weight:800">168</span></div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:30.9%"></div></div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label"><span>Not knowing how to handle illness</span><span style="color:var(--teal);font-size:15px;font-weight:800">163</span></div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:30%"></div></div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label"><span>Cannot predict serious situations</span><span style="color:var(--blush);font-size:15px;font-weight:800">106</span></div>
+          <div class="hbar-track"><div class="hbar-fill pink" style="width:19.5%"></div></div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label"><span>Delay in diagnosing illness</span><span style="color:var(--blush);font-size:15px;font-weight:800">78</span></div>
+          <div class="hbar-track"><div class="hbar-fill pink" style="width:14.4%"></div></div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label"><span>Breathing difficulty during sleep</span><span style="color:var(--peach);font-size:15px;font-weight:800">81</span></div>
+          <div class="hbar-track"><div class="hbar-fill orange" style="width:14.9%"></div></div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label"><span>None of the above</span><span style="color:var(--sub);font-size:15px;font-weight:800">182</span></div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:33.5%; background:linear-gradient(90deg,#B0BEC5,#CFD8DC)"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECTION 3: FORGOTTEN APPOINTMENTS -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="section-title"><span class="icon">📅</span> Forgotten Appointments</div>
+
+  <div class="grid-2">
+
+    <div class="card">
+      <div class="card-title">Have you forgotten medical appointments for your baby? (from 543)</div>
+      <div class="hbar" style="margin-top:8px">
+        <div class="hbar-item">
+          <div class="hbar-label"><span>💊 Medicine doses</span><span style="color:var(--teal);font-size:15px;font-weight:800">140 <small style="font-size:11px;color:var(--sub)">(25.8%)</small></span></div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:25.8%"></div></div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label"><span>💉 Vaccination appointments</span><span style="color:var(--blush);font-size:15px;font-weight:800">84 <small style="font-size:11px;color:var(--sub)">(15.5%)</small></span></div>
+          <div class="hbar-track"><div class="hbar-fill pink" style="width:15.5%"></div></div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label"><span>🏥 Doctor visits</span><span style="color:var(--peach);font-size:15px;font-weight:800">22 <small style="font-size:11px;color:var(--sub)">(4%)</small></span></div>
+          <div class="hbar-track"><div class="hbar-fill orange" style="width:4%"></div></div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label"><span>✅ Never forgot</span><span style="color:var(--sub);font-size:15px;font-weight:800">361 <small style="font-size:11px;color:var(--sub)">(66.5%)</small></span></div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:66.5%; background:linear-gradient(90deg,#B0BEC5,#CFD8DC)"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Concerns of future parents -->
+    <div class="card">
+      <div class="card-title">Concerns of future parents (Multiple choice — from 123)</div>
+      <div class="hbar" style="margin-top:8px">
+        <div class="hbar-item">
+          <div class="hbar-label"><span>🚨 Emergencies (fever, breathing difficulties)</span><span style="color:var(--teal);font-size:15px;font-weight:800">94</span></div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:76.4%"></div></div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label"><span>❓ Not knowing how to handle illness</span><span style="color:var(--blush);font-size:15px;font-weight:800">81</span></div>
+          <div class="hbar-track"><div class="hbar-fill pink" style="width:65.9%"></div></div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label"><span>🏥 General child health</span><span style="color:var(--peach);font-size:15px;font-weight:800">74</span></div>
+          <div class="hbar-track"><div class="hbar-fill orange" style="width:60.2%"></div></div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label"><span>📅 Forgetting appointments</span><span style="color:var(--sub);font-size:15px;font-weight:800">17</span></div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:13.8%; background:linear-gradient(90deg,#9B59B6,#C39BD3)"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SECTION 4: APP RECEPTION -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="section-title"><span class="icon">📱</span> Interest in the App</div>
+
+  <div class="grid-2">
+
+    <!-- Current parents opinion -->
+    <div class="card">
+      <div class="card-title">Current parents' opinion on the smart app idea (543)</div>
+      <div class="chart-wrap">
+        <canvas id="chartAppCurrent"></canvas>
+      </div>
+    </div>
+
+    <!-- Future parents opinion -->
+    <div class="card">
+      <div class="card-title">Opinion of future parents about the app idea (123)</div>
+      <div class="chart-wrap">
+        <canvas id="chartAppFuture"></canvas>
+      </div>
+    </div>
+
+    <!-- How future parents will monitor -->
+    <div class="card">
+      <div class="card-title">How do future parents expect to monitor their child's health? (123)</div>
+      <div class="chart-wrap">
+        <canvas id="chartFutureMonitor"></canvas>
+      </div>
+    </div>
+
+    <!-- Combined willingness -->
+    <div class="card">
+      <div class="card-title"> Willingness to Use the App — All Participants (666)</div>
+      <div class="hbar" style="margin-top:12px">
+        <div class="hbar-item">
+          <div class="hbar-label"><span>✅ Yes, it will help me / I will use it</span><span style="color:var(--teal);font-size:16px;font-weight:900">485 <small style="color:var(--sub);font-size:11px">(72.8%)</small></span></div>
+          <div class="hbar-track" style="height:16px"><div class="hbar-fill" style="width:72.8%"></div></div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label"><span>🤔 Maybe / I am thinking about it</span><span style="color:var(--peach);font-size:16px;font-weight:900">258 <small style="color:var(--sub);font-size:11px">(38.7%)</small></span></div>
+          <div class="hbar-track" style="height:16px"><div class="hbar-fill orange" style="width:38.7%"></div></div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label"><span>❌ No, I won't use it</span><span style="color:var(--sub);font-size:16px;font-weight:900">46 <small style="color:var(--sub);font-size:11px">(6.9%)</small></span></div>
+          <div class="hbar-track" style="height:16px"><div class="hbar-fill" style="width:6.9%; background:linear-gradient(90deg,#EF5350,#EF9A9A)"></div></div>
+        </div>
+      </div>
+      <div style="margin-top:20px; text-align:center; padding:14px; background:linear-gradient(135deg,rgba(78,205,196,0.10),rgba(43,174,156,0.05)); border-radius:12px;">
+        <span style="font-size:28px;font-weight:900;color:var(--deep)">93.1%</span>
+        <span style="font-size:13px;color:var(--sub);display:block;margin-top:2px">of participants are ready or considering using the app</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- KEY INSIGHTS -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="section-title"><span class="icon">💡</span> Main Insights</div>
+
+  <div class="grid-2">
+    <div class="insight">
+      <div class="insight-icon">🌡️</div>
+      <div class="insight-text">
+        <h4>Sudden Fever: The Primary Concern</h4>
+        <p>Sudden fever is the most common worry for mothers (168 of 543). This makes real-time monitoring and instant alerts one of the most important features for the app.</p>
+      </div>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">📱</div>
+      <div class="insight-text">
+        <h4>Strong interest in the smart app</h4>
+        <p>93.1% of participants are ready to use the app or are thinking about it. This shows real market demand for a complete tech solution to monitor child health.</p>
+      </div>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">💊</div>
+      <div class="insight-text">
+        <h4>Forgotten Medication: The Most Common Challenge</h4>
+        <p>25.8% of mothers forgot medicine doses. This shows a real need for a smart, reliable reminder system built into the app.</p>
+      </div>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">👩‍⚕️</div>
+      <div class="insight-text">
+        <h4>Traditional Monitoring Still common</h4>
+        <p>53% of mothers monitor their child's health by themselves, and 35% with a doctor. This shows a big opportunity for tech solutions that support, not replace, traditional care.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>
+    Survey Data Report — <strong>SAGHIRI Project</strong><br>
+    Created by: <strong>BOULENOUAR HADJER</strong><br>
+    Date: <strong>December 2025</strong>
+  </p>
+</footer>
+
+<script>
+// ── HELPERS ──────────────────────────────────────────────
+const COLORS = {
+  teal:    '#2BAE9C',
+  mint:    '#4ECDC4',
+  blush:   '#FF6B9D',
+  peach:   '#FFB347',
+  lavender:'#A8DADC',
+  purple:  '#9B59B6',
+  gray:    '#B0BEC5',
+  deep:    '#1A535C',
+};
+
+const palette = [COLORS.teal, COLORS.blush, COLORS.peach, COLORS.lavender, COLORS.purple, COLORS.mint];
+
+Chart.defaults.font.family = "'Cairo', sans-serif";
+Chart.defaults.plugins.legend.position = 'bottom';
+Chart.defaults.plugins.legend.labels.padding = 16;
+Chart.defaults.plugins.legend.labels.usePointStyle = true;
+Chart.defaults.plugins.legend.labels.pointStyleWidth = 10;
+Chart.defaults.plugins.tooltip.padding = 12;
+Chart.defaults.plugins.tooltip.cornerRadius = 10;
+Chart.defaults.plugins.tooltip.titleFont = { weight: '700' };
+
+function makeDoughnut(id, labels, data, colors) {
+  new Chart(document.getElementById(id), {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{ data, backgroundColor: colors || palette, borderWidth: 0, hoverOffset: 8 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      cutout: '68%',
+      plugins: {
+        legend: {
+          labels: { font: { size: 12 }, color: '#5A7A7C' }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.label}: ${ctx.parsed} (${Math.round(ctx.parsed / ctx.dataset.data.reduce((a,b)=>a+b,0) * 100)}%)`
+          }
+        }
+      }
+    }
+  });
+}
+
+function makeBar(id, labels, data, color, horizontal) {
+  new Chart(document.getElementById(id), {
+    type: horizontal ? 'bar' : 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: color || palette,
+        borderRadius: 8,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      indexAxis: horizontal ? 'y' : 'x',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#5A7A7C', font: { size: 11 } } },
+        y: { grid: { color: '#F0F5F5' }, ticks: { color: '#5A7A7C', font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+// ── CHART 1: Parenthood ──────────────────────────────────
+makeDoughnut('chartParent',
+  ['Parent (child)', 'Parent (children)', 'Future Parent'],
+  [365, 174, 123],
+  [COLORS.teal, COLORS.mint, COLORS.lavender]
+);
+
+// ── CHART 2: Child Age ───────────────────────────────────
+makeDoughnut('chartAge',
+  ['2–3 years', '1–2 years', '6–12 months', '0–6 months'],
+  [190, 156, 102, 95],
+  [COLORS.teal, COLORS.blush, COLORS.peach, COLORS.lavender]
+);
+
+// ── CHART 3: Monitoring Method ───────────────────────────
+makeDoughnut('chartMonitor',
+  ['By myself', 'With a doctor', 'Not monitoring regularly', 'Simple devices'],
+  [289, 190, 32, 31],
+  [COLORS.teal, COLORS.blush, COLORS.gray, COLORS.peach]
+);
+
+// ── CHART 4: Difficulty ──────────────────────────────────
+makeDoughnut('chartDifficulty',
+  ['Sometimes', 'Yes', 'No'],
+  [292, 216, 35],
+  [COLORS.peach, COLORS.blush, COLORS.teal]
+);
+
+// ── CHART 5: Sufficient Info ─────────────────────────────
+makeDoughnut('chartInfo',
+  ['Somewhat', 'No', 'Yes'],
+  [77, 23, 23],
+  [COLORS.peach, COLORS.blush, COLORS.teal]
+);
+
+// ── CHART 6: App Opinion (Current Parents) ───────────────
+makeDoughnut('chartAppCurrent',
+  ['Yes, it would help', 'Good, I am thinking about it', 'No'],
+  [73, 46, 4],
+  [COLORS.teal, COLORS.peach, COLORS.blush]
+);
+
+// ── CHART 7: App Opinion (Future Parents) ────────────────
+makeDoughnut('chartAppFuture',
+  ['Yes', 'Maybe', 'No'],
+  [250, 258, 46],
+  [COLORS.teal, COLORS.peach, COLORS.blush]
+);
+
+// ── CHART 8: Future Monitoring Method ───────────────────
+makeBar('chartFutureMonitor',
+  ['By Myself', 'With a Doctor', 'Not Sure', 'Smart Devices'],
+  [43, 42, 21, 17],
+  [COLORS.teal, COLORS.blush, COLORS.peach, COLORS.lavender],
+  false
+);
+</script>
+</body>
+</html>
